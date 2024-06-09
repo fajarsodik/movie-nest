@@ -21,9 +21,7 @@ import { ConfigModule } from '@nestjs/config';
       synchronize: true,
       logging: true,
     }),
-    ConfigModule.forRoot({
-      envFilePath: ['.env'],
-    }),
+    ConfigModule.forRoot({}),
     UserModule,
     FilmModule,
     AuthModule,

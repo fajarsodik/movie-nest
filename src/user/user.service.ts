@@ -34,11 +34,11 @@ export class UserService {
     username: string,
     password: string,
   ): Promise<User> {
-    return this.userRepository.findOneBy({ username, password});
+    return this.userRepository.findOneBy({ username, password });
   }
 
   findOneByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneBy({username});
+    return this.userRepository.findOne({ where: { username } });
   }
 
   update(id: number, updateUserDto: UpdateUserDto): Promise<User> {

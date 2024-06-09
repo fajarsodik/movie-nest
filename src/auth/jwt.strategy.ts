@@ -1,18 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
+import { User } from 'src/user/entities/user.entity';
+import { AuthService } from './auth.service';
+import 'dotenv/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: process.env.secret_key,
     });
+    this.logger = new Logger('JwtStrategy');
   }
 
+  private logger: Logger;
+
   async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
+    let datanya = typeof payload;
+    this.logger.log(`tipe : ${datanya} ${payload.username}`);
+    console.log('joskaannnnn');
+    return { payload };
   }
 }
