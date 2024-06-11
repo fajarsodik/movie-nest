@@ -3,10 +3,6 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Logger } from '@nestjs/common';
-import { User } from 'src/user/entities/user.entity';
-import { LoginDto } from './dto/login.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -28,18 +24,37 @@ export class AuthService {
     console.log('jos');
     if (user && (await bcrypt.compare(password, user.password))) {
       const { password, ...result } = user;
-      this.logger.log(`apa nih ${user.name}`);
+      this.logger.log(`apa nih ${user.name} ${result}`);
       // throw new Error('Script terminated');
       return result;
     }
     return null;
   }
 
-  async login(user: any): Promise<{ accessToken: string }> {
+  async login(
+    user: any,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     this.logger.log(`payloadnya gannn ${user}`);
     const payload = { username: user.username, sub: user.id };
     return {
       accessToken: this.jwtService.sign(payload),
+      refreshToken: this.jwtService.sign(payload, {
+        secret: process.env.refresh_token,
+        expiresIn: '7d',
+        algorithm: 'HS256',
+      }),
     };
+  }
+
+  async refresh(token: string) {
+    const decoded = this.jwtService.verify(token, {
+      secret: process.env.refresh_token,
+    });
+    const payload = { username: decoded.username, sub: decoded.sub };
+    const newAccessToken = this.jwtService.sign(payload, {
+      secret: process.env.secret_key,
+      expiresIn: '15m',
+    });
+    return { accessToken: newAccessToken };
   }
 }
