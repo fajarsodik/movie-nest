@@ -16,7 +16,6 @@ export class AuthController {
    */
   constructor(
     private authService: AuthService,
-    private userService: UserService,
   ) {
     this.logger = new Logger('AuthController');
   }
@@ -55,5 +54,10 @@ export class AuthController {
   async refresh(@Req() req: Request) {
     const refreshToken = req.headers.authorization.split(' ')[1];
     return this.authService.refresh(refreshToken);
+  }
+
+  @Post('logout')
+  async logout() {
+    return await { 'gaskan logout': 'joskan' };
   }
 }

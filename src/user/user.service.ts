@@ -22,6 +22,15 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
+  async uploadFile(file: Express.Multer.File) {
+    return {
+      originalName: file.originalname,
+      fileName: file.filename,
+      size: file.size,
+      mimetype: file.mimetype
+    }
+  }
+
   findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
