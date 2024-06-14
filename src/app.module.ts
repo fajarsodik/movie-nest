@@ -7,6 +7,7 @@ import { User } from './user/entities/user.entity';
 import { FilmModule } from './film/film.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { Film } from './film/entities/film.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
       port: 5432,
       password: 'H3v@h4ha',
       username: 'postgres',
-      entities: [User],
+      entities: [User, Film],
       database: 'fullstackfilm',
       synchronize: true,
       logging: true,

@@ -1,15 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFilmDto } from './dto/create-film.dto';
 import { UpdateFilmDto } from './dto/update-film.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Film } from './entities/film.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FilmService {
+  /**
+   *
+   */
+  constructor(@InjectRepository(Film) private readonly filmRepository: Repository<Film>) {}
   create(createFilmDto: CreateFilmDto) {
-    return 'This action adds a new film';
+    const film: Film = new Film();
+    film.description = createFilmDto.description;
+    film.title = createFilmDto.title;
+    film.image_thumbnail = createFilmDto.image_thumbnail;
+    return this.filmRepository.save(film);
   }
 
-  findAll() {
-    return `This action returns all film`;
+  findAll(): Promise<Film[]> {
+    return this.filmRepository.find();
   }
 
   findGreaterThan() {
