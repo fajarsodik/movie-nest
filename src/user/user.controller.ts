@@ -33,7 +33,7 @@ export class UserController {
 
   private logger: Logger;
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
@@ -75,7 +75,7 @@ export class UserController {
     return await this.userService.uploadFile(file);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();
@@ -93,7 +93,7 @@ export class UserController {
     return this.userService.update(+id, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
