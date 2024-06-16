@@ -58,14 +58,14 @@ export class UserController {
   async uploadAvatar(
     @UploadedFile(
       new ParseFilePipeBuilder()
-        // .addValidator(
-        //   new CustomUploadFileTypeValidator({
-        //     fileType: VALID_UPLOAD_MIME_TYPES,
-        //   }),
-        // )
-        .addFileTypeValidator({
-          fileType: 'image/jpeg',
-        })
+        .addValidator(
+          new CustomUploadFileTypeValidator({
+            fileType: VALID_UPLOAD_MIME_TYPES,
+          }),
+        )
+        // .addFileTypeValidator({
+        //   fileType: 'image/jpeg',
+        // })
         .addMaxSizeValidator({ maxSize: MAX_PROFILE_PICTURE_SIZE_IN_BYTES })
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
     )

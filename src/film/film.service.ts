@@ -10,7 +10,9 @@ export class FilmService {
   /**
    *
    */
-  constructor(@InjectRepository(Film) private readonly filmRepository: Repository<Film>) {}
+  constructor(
+    @InjectRepository(Film) private readonly filmRepository: Repository<Film>,
+  ) {}
   create(createFilmDto: CreateFilmDto) {
     const film: Film = new Film();
     film.description = createFilmDto.description;
@@ -27,15 +29,20 @@ export class FilmService {
     return `this return greater than`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} film`;
+  findOne(id: string) {
+    return this.filmRepository.findOneBy({ id });
   }
 
-  update(id: number, updateFilmDto: UpdateFilmDto) {
-    return `This action updates a #${id} film`;
+  update(id: string, updateFilmDto: UpdateFilmDto) {
+    const film: Film = new Film();
+    film.title = updateFilmDto.title;
+    film.description = updateFilmDto.description;
+    film.image_thumbnail = updateFilmDto.image_thumbnail;
+    film.id = id;
+    return this.filmRepository.save(film);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} film`;
+  remove(id: string): Promise<{ affected?: number }> {
+    return this.filmRepository.delete(id);
   }
 }
